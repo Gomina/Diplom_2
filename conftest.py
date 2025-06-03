@@ -6,11 +6,13 @@ from data import TU
 from helper import UserMethods
 from urls import URL
 
+
+@allure.step('метод создает пользователя c данными User_1')
 @pytest.fixture
 def data_user():
     return TU.User_1
 
-
+@allure.step('метод создает пользователя c данными User_5')
 @pytest.fixture
 def data_second_user():
     return TU.User_5
@@ -106,7 +108,7 @@ def register_login_delete_user_with_data(request):
     usermethods.delete_user(login_response.json()["accessToken"])
 
 
-# фикстура для создания заказа
+@allure.step('метод создает заказ')
 @pytest.fixture
 def create_order(request):
     ingredients = request.param
