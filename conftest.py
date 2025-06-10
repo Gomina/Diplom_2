@@ -94,14 +94,3 @@ def register_login_delete_user_with_data(request):
     }
     # удалить пользователя
     usermethods.delete_user(login_response.json()["accessToken"])
-
-
-@allure.step('метод создает заказ')
-@pytest.fixture
-def create_order(request):
-    ingredients = request.param
-    create_order_response = requests.post(
-        URL.CREATE_ORDER,
-        json=ingredients
-    )
-    return create_order_response
