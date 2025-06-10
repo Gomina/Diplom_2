@@ -7,18 +7,6 @@ from helper import UserMethods
 from urls import URL
 
 
-@allure.step('метод создает пользователя c данными User_1')
-@pytest.fixture
-def data_user():
-    return TU.User_1
-
-@allure.step('метод создает пользователя c данными User_5')
-@pytest.fixture
-def data_second_user():
-    return TU.User_5
-
-
-
 @allure.step('метод создает рандомного пользователя и удаляет его после теста')
 @pytest.fixture
 def create_and_delete_user():
@@ -35,10 +23,10 @@ def create_and_delete_user():
 
 
 
-@allure.step('метод создает пользователя c заданными данными и удаляет его после теста')
+@allure.step('метод создает пользователя c заданными данными (User_1) и удаляет его после теста')
 @pytest.fixture
-def create_and_delete_user_with_data(request):
-    user_data = request.getfixturevalue("data_user")
+def create_and_delete_user_with_data():
+    user_data = TU.User_1
     usermethods = UserMethods()
     # создание пользователя
     created_data = usermethods.create_user(
@@ -55,10 +43,10 @@ def create_and_delete_user_with_data(request):
 
 
 
-@allure.step('метод создает второго пользователя c заданными данными и удаляет его после теста')
+@allure.step('метод создает второго пользователя (User_5) c заданными данными и удаляет его после теста')
 @pytest.fixture
-def create_and_delete_second_user_with_data(request):
-    user_data = request.getfixturevalue("data_second_user")
+def create_and_delete_second_user_with_data():
+    user_data = TU.User_5
     usermethods = UserMethods()
     # создание пользователя
     created_data = usermethods.create_user(
@@ -75,14 +63,14 @@ def create_and_delete_second_user_with_data(request):
 
 
 
-@allure.step('метод логинит пользователя c заданными данными и удаляет после теста')
+@allure.step('метод логинит пользователя c заданными данными (User_1) и удаляет после теста')
 @pytest.fixture
 def register_login_delete_user_with_data(request):
     # получить данные из параметризации
     if hasattr(request, 'param'):
         user_data = request.param
     else:
-        user_data = request.getfixturevalue("data_user")
+        user_data = TU.User_1
 
     usermethods = UserMethods()
     # создать пользователя
