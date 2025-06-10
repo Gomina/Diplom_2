@@ -59,6 +59,24 @@ class TU:
             "name": 'Иван Иванов'
         }
 
+    # тело ответа при cоздании пользователя, если пользователь существует
+    BODY_ANSWER_USER_EXISTS = "User already exists"
+
+    # тело ответа при cоздании пользователя, без одного из обязательных полей
+    BODY_ANSWER_ONE_FIELDS_NOT_FILLED_IN = "Email, password and name are required fields"
+
+    # тело ответа при неуспешной авторизации
+    BODY_ANSWER_AUTHORIZATION_FAILED = "email or password are incorrect"
+
+    # тело ответа при изменении данных пользователя, если он авторизован, но не залогинин
+    BODY_ANSWER_YOU_MUST_BE_LOGGED_IN = "You should be authorised"
+
+    # тело ответа неуспешное изменение почты авторизованного пользователя, если такая почта уже есть у другого пользователя
+    BODY_ANSWER_ANOTHER_USER_ALREADY_HAS_THIS_EMAIL = "User with such email already exists"
+
+
+
+
 # класс TestOrder (TO)
 class TO:
     # булка - Флюоресцентная булка
@@ -72,3 +90,9 @@ class TO:
 
     # ингредиент c несуществующим ID
     ID_NON_EXISTENT_INGREDIENT = '111there1is1no1such1id'
+
+    # тело ответа при создании заказа, если не передать ни один ингредиент
+    BODY_ANSWER_NO_INGREDIENTS = "Ingredient ids must be provided"
+
+    # тело ответа при запросе заказов конкретного пользователя, если выполнить запрос без авторизации
+    BODY_ANSWER_REQUESTING_USER_ORDERS_WITHOUT_AUTHORIZATION = "You should be authorised"

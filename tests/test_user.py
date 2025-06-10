@@ -34,7 +34,7 @@ class TestUserCreation:
         assert second_creation_attempt["response"].status_code == 403
         # проверка тела ответа
         content =  second_creation_attempt["response"].json()
-        assert content.get("message") == "User already exists"
+        assert content.get("message") == TU.BODY_ANSWER_USER_EXISTS
 
 
     @allure.title('Тест на ошибку при создании пользователя без одного из обязательных полей')
@@ -55,7 +55,7 @@ class TestUserCreation:
         assert response_data["response"].status_code == 403
         # проверка тела ответа
         content = response_data['response'].json()
-        assert content.get("message") == "Email, password and name are required fields"
+        assert content.get("message") == TU.BODY_ANSWER_ONE_FIELDS_NOT_FILLED_IN
 
 
 
@@ -96,7 +96,7 @@ class TestUserLogin:
         assert login_response.status_code == 401
         # проверка тела ответа
         response_json = login_response.json()
-        assert response_json.get("message") == "email or password are incorrect"
+        assert response_json.get("message") == TU.BODY_ANSWER_AUTHORIZATION_FAILED
 
 
 
@@ -245,7 +245,7 @@ class TestUserСhange:
         assert change_response.status_code == 401
         # проверка тела ответа
         response_json = change_response.json()
-        assert response_json.get("message") == "You should be authorised"
+        assert response_json.get("message") == TU.BODY_ANSWER_YOU_MUST_BE_LOGGED_IN
 
 
     @allure.title('Тест на неуспешное изменение почты авторизованного пользователя, если такая почта уже есть у другого пользователя')
@@ -272,7 +272,7 @@ class TestUserСhange:
         assert change_response.status_code == 403
         # проверка тела ответа
         response_json = change_response.json()
-        assert response_json.get("message") == "User with such email already exists"
+        assert response_json.get("message") == TU.BODY_ANSWER_ANOTHER_USER_ALREADY_HAS_THIS_EMAIL
 
 
 

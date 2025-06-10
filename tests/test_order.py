@@ -31,7 +31,7 @@ class TestCreateOrder:
         assert create_order.status_code == 400
         # проверка тела ответа
         response_json = create_order.json()
-        assert response_json.get("message") == "Ingredient ids must be provided"
+        assert response_json.get("message") ==  TO.BODY_ANSWER_NO_INGREDIENTS
 
 
     @allure.title('Тест на не успешное создание заказа с несуществующим ID ингредиента без авторизации')
@@ -74,7 +74,7 @@ class TestCreateOrder:
         assert create_order.status_code == 400
         # проверка тела ответа
         response_json = create_order.json()
-        assert response_json.get("message") == "Ingredient ids must be provided"
+        assert response_json.get("message") == TO.BODY_ANSWER_NO_INGREDIENTS
 
 
     @allure.title('Тест на не успешное создание заказа с несуществующим ID ингредиента c авторизацией')
@@ -132,4 +132,4 @@ class TestReceivingOrders:
         assert request_orders_response.status_code == 401
         # проверка тела ответа
         response_json = request_orders_response.json()
-        assert response_json.get("message") == "You should be authorised"
+        assert response_json.get("message") == TO.BODY_ANSWER_REQUESTING_USER_ORDERS_WITHOUT_AUTHORIZATION
