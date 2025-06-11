@@ -9,10 +9,13 @@ from urls import URL
 
 
 class UserMethods:
+
+
     @staticmethod
     @allure.step('генерация случайной строки из букв нижнего регистра для логина или пароля')
     def generate_random_string(length=10):
         return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
+
 
     @staticmethod
     @allure.step('генерация случайной почты')
@@ -20,8 +23,9 @@ class UserMethods:
         random_part = ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
         return f"{random_part}@yandex.ru"
 
+
     @allure.step('создать нового пользователя')
-    def create_user(self, email=None, password=None, name=None, allow_partial=False):
+    def create_user_payload(self, email=None, password=None, name=None, allow_partial=False):
         payload = {}
 
         # если все данные введены или все поля пустые
@@ -40,14 +44,7 @@ class UserMethods:
             if name is not None:
                 payload["name"] = name
 
-        response = requests.post(URL.CREATE_USER, json=payload)
-
-        return {
-            "email": payload.get("email"),
-            "password": payload.get("password"),
-            "name": payload.get("name"),
-            "response": response
-        }
+        return payload
 
     @allure.step('удалить пользователя')
     def delete_user(self, token):

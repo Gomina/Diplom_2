@@ -7,90 +7,48 @@ from helper import UserMethods
 from urls import URL
 
 
-@allure.step('метод создает рандомного пользователя и удаляет его после теста')
+@allure.step('метод удаляет пользователя после теста')
+@pytest.fixture
+def delete_created_user():
+    tokens_to_delete = []  # собрать токен для удаления
+    def add_token(token):
+        tokens_to_delete.append(token)
+    yield add_token
+    # после завершения теста удаляем пользователя
+    usermethods = UserMethods()
+    for token in tokens_to_delete:
+        usermethods.delete_user(token)
+
+
+@allure.step('метод создает пользователя и удаляет его после теста')
 @pytest.fixture
 def create_and_delete_user():
     usermethods = UserMethods()
-    created_data = usermethods.create_user()
-    data = {
-        "response": created_data["response"],
-        "email": created_data["email"],
-        "password": created_data["password"]
+    # создать пользователя
+    create_response = requests.post(URL.CREATE_USER, json=TU.User_1)
+    # вернуть данные пользователя
+    yield {
+        "response": create_response,
+        "user_data": TU.User_1,
+        "token": create_response.json().get("accessToken")
     }
-    yield data
-    token = created_data["response"].json().get("accessToken")
-    usermethods.delete_user(token)
+
+    # удалить пользователя после завершения теста
+    usermethods.delete_user(create_response.json().get("accessToken"))
 
 
-
-@allure.step('метод создает пользователя c заданными данными (User_1) и удаляет его после теста')
+@allure.step('метод создает вторго пользователя (из TU.User_5) и удаляет его после теста')
 @pytest.fixture
-def create_and_delete_user_with_data():
-    user_data = TU.User_1
-    usermethods = UserMethods()
-    # создание пользователя
-    created_data = usermethods.create_user(
-        email=user_data["email"],
-        password=user_data["password"],
-        name=user_data["name"]
-    )
-
-    yield created_data
-
-    # удаление пользователя после завершения теста
-    token = created_data["response"].json().get("accessToken")
-    usermethods.delete_user(token)
-
-
-
-@allure.step('метод создает второго пользователя (User_5) c заданными данными и удаляет его после теста')
-@pytest.fixture
-def create_and_delete_second_user_with_data():
-    user_data = TU.User_5
-    usermethods = UserMethods()
-    # создание пользователя
-    created_data = usermethods.create_user(
-        email=user_data["email"],
-        password=user_data["password"],
-        name=user_data["name"]
-    )
-
-    yield created_data
-
-    # удаление пользователя после завершения теста
-    token = created_data["response"].json().get("accessToken")
-    usermethods.delete_user(token)
-
-
-
-@allure.step('метод логинит пользователя c заданными данными (User_1) и удаляет после теста')
-@pytest.fixture
-def register_login_delete_user_with_data(request):
-    # получить данные из параметризации
-    if hasattr(request, 'param'):
-        user_data = request.param
-    else:
-        user_data = TU.User_1
-
+def create_and_delete_second_user():
     usermethods = UserMethods()
     # создать пользователя
-    usermethods.create_user(
-        email=user_data["email"],
-        password=user_data["password"],
-        name=user_data["name"]
-    )
-    # логин пользователя
-    login_response = requests.post(
-        URL.LOGIN_USER,
-        json={
-            "email": user_data["email"],
-            "password": user_data["password"]
-        }
-    )
+    create_response = requests.post(URL.CREATE_USER, json=TU.User_5)
+    # вернуть данные пользователя
     yield {
-        "response": login_response,
-        "user_data": user_data,
-        "token": login_response.json()["accessToken"]
+        "response": create_response,
+        "user_data": TU.User_1,
+        "token": create_response.json().get("accessToken")
     }
-    # удалить пользователя
-    usermethods.delete_user(login_response.json()["accessToken"])
+
+    # удалить пользователя после завершения теста
+    usermethods.delete_user(create_response.json().get("accessToken"))
